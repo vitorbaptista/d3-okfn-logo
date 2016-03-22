@@ -4,12 +4,16 @@
   "description": "The Open Knowledge's logo",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "mkdir -p build",
+    "build": "rollup -c rollup.config.js -o build/bundle.js"
   },
   "author": "Vitor Baptista",
   "license": "MIT",
   "dependencies": {
+    "d3": "^4.0.0-alpha.28"
   },
   "devDependencies": {
+    "rollup": "^0.25.5",
+    "rollup-plugin-node-resolve": "^1.5.0"
   }
 }
