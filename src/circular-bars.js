@@ -6,17 +6,32 @@ import {
 
 export default function() {
   var xScale = d3ScaleLinear();
+  var widthScale = d3ScaleLinear();
   var width = 960;
   var height = 500;
   var barWidth = 20;
   var barMaxHeight = 200;
   var innerCircleRadius = 100;
+  var growOutwards = true;
 
   function chart(selection) {
     selection.each(function(data, i) {
+      // For growing outwards, the X is kept constant. For growing inwards, the
+      // X is changed depending on the bar size.
+      var xScaleRange;
+      if (growOutwards) {
+        xScaleRange = [innerCircleRadius, innerCircleRadius];
+      } else {
+        xScaleRange = [innerCircleRadius + barMaxHeight, innerCircleRadius];
+      }
+
       xScale
         .domain([0, max(data)])
-        .range([innerCircleRadius, innerCircleRadius + barMaxHeight]);
+        .range(xScaleRange);
+
+      widthScale
+        .domain([0, max(data)])
+        .range([0, barMaxHeight]);
 
       var svg = d3Select(this)
         .selectAll('svg')
@@ -34,16 +49,12 @@ export default function() {
         .enter().append('g')
           .attr('transform', function(d, i) {
             return 'rotate(' + i * (360 / data.length) + ')';
-          });
+          })
 
       bar.append('rect')
-        .attr('width', xScale)
-        .attr('height', barWidth - 1);
-
-        console.log(innerCircleRadius);
-      barGroup.append('circle')
-        .attr('r', innerCircleRadius)
-        .attr('fill', 'white');
+        .attr('width', widthScale)
+        .attr('x', xScale)
+        .attr('height', barWidth);
     });
   }
 
@@ -74,6 +85,12 @@ export default function() {
   chart.innerCircleRadius = function(_) {
     if (!arguments.length) { return innerCircleRadius; }
     innerCircleRadius = _;
+    return chart;
+  }
+
+  chart.growOutwards = function(_) {
+    if (!arguments.length) { return growOutwards; }
+    growOutwards = _;
     return chart;
   }
 
