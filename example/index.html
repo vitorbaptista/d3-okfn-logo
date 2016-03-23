@@ -8,8 +8,15 @@
   <script src="../build/bundle.js"></script>
   <script>
     var data = [10, 15, 32, 10, 8, 20, 15, 32, 10, 8, 20, 15, 32, 10, 8, 20, 15, 32, 10, 8, 20, 15, 32, 10, 8, 20];
+    var chart = d3OKLogo()
+      .width(1000)
+      .height(1000)
+      .barWidth(10)
+      .barMaxHeight(100)
+      .innerCircleRadius(100);
+
     d3.select('main')
       .datum(data)
-      .call(d3OKLogo());
+      .call(chart);
   </script>
 </body>
