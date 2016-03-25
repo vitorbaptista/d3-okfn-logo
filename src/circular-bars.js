@@ -13,6 +13,7 @@ export default function() {
   var barMaxHeight = 200;
   var innerCircleRadius = 100;
   var growOutwards = true;
+  var className = 'circular-bars';
 
   function chart(selection) {
     selection.each(function(data, i) {
@@ -37,12 +38,13 @@ export default function() {
         .selectAll('svg')
         .data([data]);
 
-      var chart = svg.enter().append('svg')
+      var chart = svg.enter().append('g')
         .attr('width', width)
-        .attr('height', height);
+        .attr('height', height)
+        .classed(className, true);
 
       var barGroup = chart.append('g')
-        .attr('transform', 'translate(480, 250)');
+        .attr('transform', 'translate(' + width/2 + ',' + height/2 + ')');
 
       var bar = barGroup.selectAll('g')
           .data(data)
@@ -91,6 +93,12 @@ export default function() {
   chart.growOutwards = function(_) {
     if (!arguments.length) { return growOutwards; }
     growOutwards = _;
+    return chart;
+  }
+
+  chart.className = function(_) {
+    if (!arguments.length) { return className; }
+    className = _;
     return chart;
   }
 
